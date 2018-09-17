@@ -11,4 +11,4 @@ Also, you need to install the "color normalization toolbox" from this link: http
 You should install it in the sub-folder "subroutines_normalization"
 
 ## Where can I get your pre-trained VGG model?
-The model is available via this DOI: 10.5281/zenodo.1420524 
+The model is available here: http://doi.org/10.5281/zenodo.1420524 
