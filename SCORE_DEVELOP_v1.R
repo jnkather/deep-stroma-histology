@@ -18,11 +18,13 @@ library(ggfortify)
 library(OptimalCutpoints)
 library(openxlsx)
 dosave <- T
-dir.create("./kaplan_out"); # create output dir
-# locate and load input data
-setwd("[insert path here]")
+dir.create("./kaplan_out_develop"); # create output dir
 
-for (myTableName in c("TCGA_FULL","DACHS_FULL_OS","DACHS_FULL_CRCS")) { # "DACHS_FULL_OS" DACHS_FULL_CRCS TCGA_FULL
+# set the working directory to where this script is
+this.dir <- dirname(parent.frame(2)$ofile)
+setwd(this.dir)
+
+for (myTableName in c("TCGA_FULL")) 
   for (mySubset in c("ALL")) {
   
 if ((myTableName =="TCGA_FULL")) {
@@ -30,19 +32,7 @@ if ((myTableName =="TCGA_FULL")) {
 myTable$OS_event <- myTable$vital_status
 myTable$days_to_event <- myTable$days_to_event/365.25 # days to years
 myTable$decades_to_birth <- myTable$years_to_birth/10
-} else if ((myTableName =="DACHS_OS") || (myTableName =="DACHS_CRCS")) {
-  myTable = read.xlsx( "DACHS_MEASUREMENTS.xlsx") 
-  columnShift <- 0 # no need to shift columns because ADI BACK etc are columns 2 3 etc
-  if (myTableName == "DACHS_OS") {
-  myTable$OS_event <- myTable$death_event_35fu 
-  } else if (myTableName == "DACHS_CRCS") {
-    myTable$OS_event <- myTable$crc_death_35fu 
-  }
-  myTable$days_to_event <- myTable$fudays_35fu/365.25 # days to years
-  myTable$decades_to_birth <- myTable$indexage/10
-  myTable$gender <- myTable$sex
-  myTable$cleanstage <- myTable$crcstage
-}
+} 
 
     if (mySubset == "STAGE1") {
       myTable = subset(myTable,(cleanstage==1))
@@ -129,9 +119,8 @@ for (i in c(index.components)) # index.components
     survp <- ggsurv
   if ( dosave ) {
   #ggsave(paste("./kaplan_out/",myTableName,allNames[i],mySubset,".pdf",sep="_"), print(survp))
-    ggsave(paste("./kaplan_out/",myTableName,allNames[i],mySubset,".png",sep="_"), print(survp))
+    ggsave(paste("./kaplan_out_develop/",myTableName,allNames[i],mySubset,".png",sep="_"), print(survp))
   }
   } else { print("NO DRAW")}
 }
   }
-}

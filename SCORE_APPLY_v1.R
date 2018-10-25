@@ -20,13 +20,14 @@ library(openxlsx)
 dosave <- T
 dir.create("./kaplan_out"); # create output dir
 
-# locate and load input data
-setwd("[insert path here]")
+# set the working directory to where this script is
+this.dir <- dirname(parent.frame(2)$ofile)
+setwd(this.dir)
 
-for (myTableName in c("TCGA_FULL")) { # "DACHS_FULL_OS" DACHS_FULL_CRCS TCGA_FULL ,"DACHS_FULL_OS","DACHS_FULL_CRCS", "DACHS_FULL_RFS"
-for (mySubset in c("ALL STAGES")) { #  ###)) { ,"STAGE1","STAGE2","STAGE3","STAGE4
+for (myTableName in c("TCGA_FULL","DACHS_FULL_OS","DACHS_FULL_CRCS")) { # TCGA_FULL ,"DACHS_FULL_OS","DACHS_FULL_CRCS", "DACHS_FULL_RFS"
+for (mySubset in c("ALL STAGES" ,"STAGE1","STAGE2","STAGE3","STAGE4")) {
 if (myTableName =="TCGA_FULL") {
-  myTable = read.xlsx(paste("TCGA_MEASUREMENTS.xlsx",sep=""))
+  myTable = read.xlsx("TCGA_MEASUREMENTS.xlsx")
   myTable$OS_event <- myTable$vital_status
   myTable$days_to_event <- myTable$days_to_event/365.25 # days to years
   myTable$decades_to_birth <- myTable$years_to_birth/10 # years to decades
